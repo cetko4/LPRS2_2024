@@ -16,42 +16,31 @@ void loop() {
   float voltage = 0;
   float resistance = 0;
   float temp = 0;
+  
   voltage = analogRead(analogPin) / 204.6;
-  resistance = interpolateResist(voltage);
-  temp = interpolateTemperature(resistance);
+  //voltage to temp
+  temp = interpolateVoltageToTemperature(voltage);
 
   lcd.setCursor(0, 0);
-  lcd.print("Resist: ");
-  lcd.print(resistance);
+  lcd.print("Voltage: ");
+  lcd.print(voltage);
   lcd.setCursor(0, 1);
   lcd.print("Temp:   ");
   lcd.print(temp);
   lcd.print(" C");
 
-  Serial.print(" Resist: ");
-  Serial.print(resistance);
+  Serial.print(" Voltage: ");
+  Serial.print(voltage);
   Serial.print(" Temp: ");
   Serial.println(temp);
 
-  delay(500);
-  if(temp > 100){
+  delay(250);
+  if(temp >= 100){
     lcd.clear();
   }
 }
 
-float interpolateTemperature(float resistance) {
-  int i;
-  for (i = 0; i < 12; i++) {
-    if (resistance >= resistanceTable[i] && resistance <= resistanceTable[i + 1]) {
-      break;
-    }
-  }
-
-  float temp = temperature[i] + (resistance - resistanceTable[i]) * (temperature[i + 1] - temperature[i]) / (resistanceTable[i + 1] - resistanceTable[i]);
-  return temp;
-}
-
-float interpolateResist(float voltage) {
+float interpolateVoltageToTemperature(float voltage) {
   int i;
   for (i = 0; i < 12; i++) {
     if (voltage >= voltageTable[i] && voltage <= voltageTable[i + 1]) {
@@ -59,6 +48,6 @@ float interpolateResist(float voltage) {
     }
   }
 
-  float resist = resistanceTable[i] + (voltage - voltageTable[i]) * (resistanceTable[i + 1] - resistanceTable[i]) / (voltageTable[i + 1] - voltageTable[i]);
-  return resist;
+  float temp = temperature[i] + (voltage - voltageTable[i]) * (temperature[i + 1] - temperature[i]) / (voltageTable[i + 1] - voltageTable[i]);
+  return temp;
 }
