@@ -26,5 +26,7 @@ G121 X0 Y-27.5 R2.5
 ; Cut out
 G121 X0 Y0 R35
 
+;TODO include laser width
+; Measured holes: 4.8, 3.9, 5.6
 
 G90 G0 X0 Y0
